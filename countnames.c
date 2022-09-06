@@ -14,7 +14,8 @@ bool stringIsNotEqual(char string[50], char str[150]);
 /**
  * This function takes a file name, opens it, and count the name occurences in it
  * It then print the result
- * Assumption: There are less than a 100 different names, The names are less than 50 characters
+ * Assumption: There are less than a 100 different names, The names are less than 50 characters, A line
+ * with less than 2 charater is not a name and is ignored by the program
  * Input parameters: Argv[1], a text file
  * Returns: an integer
 **/
@@ -56,6 +57,11 @@ int main (int argc, char *argv[]) {
         //empty line 
         if (str[0] == '\n'){
             fprintf(stderr,"Warning - Line %d is empty.\n",line);
+            continue;
+        }
+        //If the line's lenght is less than or equal to 1, ignore the line
+        //See a1 channel on discord, message from ProfB on 09/06 at 0904 for reasoning
+        if  (str[1] == '\n'){
             continue;
         }
 
