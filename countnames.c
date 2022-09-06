@@ -42,6 +42,7 @@ int main (int argc, char *argv[]) {
 
     // opening file for reading 
     fp = fopen( argv[1], "r");
+    // check that fp is not null, return an error otherwise
     if(fp == NULL) {
         perror("error: cannot open file\n");
         return(-1);
