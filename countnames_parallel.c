@@ -1,9 +1,9 @@
 /**
- * Description: This module takes a text file and return the total count of each names in the file.
+ * Description: This module takes one or more text files and return the total count of each names in the files.
  * Author name: Lilou Sicard-Noel
  * Author email: lilou.sicard-noel@sjsu.edu 
- * Last modified date: 09/18/2022
- * Creation date: 08/31/2022
+ * Last modified date: 09/19/2022
+ * Creation date: 09/13/2022
  * GitHub Repo : https://github.com/lilousicard/CS149-Assigment1
  **/
 #include <stdio.h>
@@ -25,11 +25,11 @@ bool stringIsNotEqual(char string[MAX_LENGTH], char str[MAX_LENGTH]);
 bool nameAreEqual(struct Person one, struct Person two);
 
 /**
- * This function takes a file name, opens it, and count the name occurrences in it
+ * This function takes a list of file names, opens them, and count the name occurrences in it
  * It then print the result
  * Assumption: There are less than a 100 different names, The names are less than 30 characters, A line
  * with less than 2 characters is not a name and is ignored by the program
- * Input parameters: Argv[], a list of text file
+ * Input parameters: Argv[], a list of text files
  * Returns: an integer
 **/
 
@@ -111,7 +111,7 @@ int main (int argc, char *argv[]) {
         read(pfds[0], buf, sizeof(buf));
         //Combining the array process
         int i = 0;
-        //for everyname in the array returned by the child
+        //for every name in the array returned by the child
         while (buf[i].name[0]!='\0'&&i<100){
             //see if the name is already in the array
             int j = 0;
@@ -141,8 +141,8 @@ int main (int argc, char *argv[]) {
 /**
  * This function compares two arrays of char and return true
  * if they are not exactly equal
- * Assumption: The first array has less than 50 characters,
- *             The second array has less than 150 characters
+ * Assumption: The first array has less than 30 characters,
+ *             The second array has less than 30 characters
  * Input parameters: string, str
  * Return: a boolean
  **/
