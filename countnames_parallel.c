@@ -12,8 +12,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-const int MAX_NAME = 100;
-const int MAX_LENGTH = 30;
+#define MAX_NAME 100
+#define MAX_LENGTH 30
 
 
 struct Person {
@@ -54,6 +54,11 @@ int main (int argc, char *argv[]) {
             struct Person names[MAX_NAME];
             int namesSize = 0;
             FILE *fp;
+            
+            for (int i = 0; i < MAX_NAME; i++){
+        	names[i].name[0] = '\0';
+       	 	names[i].hasAName = false;
+       	 	}
 
             // opening file for reading
             fp = fopen( argv[i], "r");
@@ -73,6 +78,7 @@ int main (int argc, char *argv[]) {
                     fprintf(stderr,"Warning - file %s Line %d is empty.\n",argv[i],line);
                     continue;
                 }
+                //printf("File %s line: %d input : %s\n",argv[i],line,str);
                 //If the line's length is less than or equal to 1, ignore the line
                 //See a1 channel on discord, message from ProfB on 09/06 at 0904 for reasoning
                 if  (str[1] == '\n'){
