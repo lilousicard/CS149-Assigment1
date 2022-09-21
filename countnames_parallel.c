@@ -2,7 +2,7 @@
  * Description: This module takes one or more text files and return the total count of each names in the files.
  * Author name: Lilou Sicard-Noel
  * Author email: lilou.sicard-noel@sjsu.edu 
- * Last modified date: 09/19/2022
+ * Last modified date: 09/21/2022
  * Creation date: 09/13/2022
  * GitHub Repo : https://github.com/lilousicard/CS149-Assigment1
  **/
