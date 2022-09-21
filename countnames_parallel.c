@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/wait.h>
 
 const int MAX_NAME = 100;
 const int MAX_LENGTH = 30;
