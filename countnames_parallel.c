@@ -49,6 +49,7 @@ int main (int argc, char *argv[]) {
     
 
     for (int i = 1; i<argc; i++){
+        char *fileName = argv[i];
         int childID = fork();
         if (childID == 0){
             char str[MAX_LENGTH];
@@ -62,12 +63,11 @@ int main (int argc, char *argv[]) {
        	 	}
 
             // opening file for reading
-            fp = fopen( argv[i], "r");
+            fp = fopen( fileName, "r");
 
             // check that fp is not null, return an error otherwise
             if(fp == NULL) {
-
-                fprintf(stderr,"error: cannot open file %s \n",argv[i]);
+                fprintf(stderr,"error: cannot open file %s \n",fileName);
                 _Exit(1);
             }
             //int j = 0;
@@ -77,7 +77,7 @@ int main (int argc, char *argv[]) {
                 line++;
                 //empty line
                 if (str[0] == '\n'){
-                    fprintf(stderr,"Warning - file %s Line %d is empty.\n",argv[i],line);
+                    fprintf(stderr,"Warning - file %s Line %d is empty.\n",fileName,line);
                     continue;
                 }
                 //printf("File %s line: %d input : %s\n",argv[i],line,str);
@@ -97,7 +97,6 @@ int main (int argc, char *argv[]) {
                     index++;
                 }
                 if (index>=namesSize){
-                    //strcpy(names[index].name,str);
                     int i = 0;
                     while (str[i]!='\n'){
                         names[index].name[i]=str[i];
@@ -109,7 +108,7 @@ int main (int argc, char *argv[]) {
                 } else names[index].occurrence++;
             }
             fclose(fp);
-            write (pfds[1],names,sizeof (buf));
+            write (pfds[1],names,sizeof(buf));
             close (pfds[1]);
             exit(0);
         }
