@@ -66,8 +66,9 @@ int main (int argc, char *argv[]) {
 
             // check that fp is not null, return an error otherwise
             if(fp == NULL) {
-                perror("error: cannot open file\n");
-                return 1;
+
+                fprintf(stderr,"error: cannot open file %s \n",argv[i]);
+                _Exit(1);
             }
             //int j = 0;
             int line = 0;
