@@ -23,7 +23,6 @@ struct Person {
     bool hasAName;
 };
 bool stringIsNotEqual(char string[MAX_LENGTH], char str[MAX_LENGTH]);
-bool nameAreEqual(struct Person one, struct Person two);
 
 /**
  * This function takes a list of file names, opens them, and count the name occurrences in it
@@ -104,6 +103,7 @@ int main (int argc, char *argv[]) {
                     }
                     names[index].name[i]='\0';
                     names[index].occurrence = 1;
+                    names[index].hasAName = true;
                     namesSize++;
                 } else names[index].occurrence++;
             }
@@ -114,12 +114,13 @@ int main (int argc, char *argv[]) {
         }
     }
     int pid;
+    //PARENT PROCESS
     while ((pid = wait(NULL)) > 0) {
         read(pfds[0], buf, sizeof(buf));
         //Combining the array process
         int i = 0;
         //for every name in the array returned by the child
-        while (buf[i].name[0]!='\0'&&i<100){
+        while (buf[i].hasAName && i<100){
             //see if the name is already in the array
             int j = 0;
             while (listNames[j].hasAName && stringIsNotEqual(listNames[j].name,buf[i].name)){
@@ -134,14 +135,15 @@ int main (int argc, char *argv[]) {
             }
             i++;
         }
+        //close(pfds[0]); Strange behavior when place here
     }
-
+    close(pfds[0]);
     int j = 0;
     while (listNames[j].hasAName && j<100) {
         printf("%s : %d\n", listNames[j].name, listNames[j].occurrence);
         j++;
     }
-    close(pfds[0]);
+   // close(pfds[0]);
     return(0);
 }
 
@@ -164,8 +166,4 @@ bool stringIsNotEqual(char string[MAX_LENGTH], char str[MAX_LENGTH]) {
         i++;
     }
     return false;
-}
-
-bool nameAreEqual(struct Person one, struct Person two){
-    return strcmp(one.name,two.name);
 }
