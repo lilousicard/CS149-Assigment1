@@ -16,7 +16,16 @@
 #define MAX_NAME 100
 #define MAX_LENGTH 30
 
-
+/**
+ * Structure Person: A structure that represente a 
+ * name and the occurence of that name.
+ * The boolean has A Name is to know if the string is 
+ * null or not
+ * Name: a String of 30 char or less
+ * occurence: the number of time the name appear
+ * hasAName: boolean to know if the name is initialized
+ * 
+ **/
 struct Person {
     char name[MAX_LENGTH];
     int occurrence;
@@ -40,13 +49,16 @@ int main (int argc, char *argv[]) {
     struct Person listNames[MAX_NAME];
     pipe(pfds);
 
-    
+    //Initialized all the persons in listNames to 
+    //avoid any bad surprise
     for (int i = 0; i < MAX_NAME; i++){
         listNames[i].name[0] = '\0';
         listNames[i].hasAName = false;
     }
     
-
+    //Start the process of reading all the file
+    //This loop will not execute itself if the process
+    // was called without any file name
     for (int i = 1; i<argc; i++){
         char *fileName = argv[i];
         int childID = fork();
@@ -56,6 +68,8 @@ int main (int argc, char *argv[]) {
             int namesSize = 0;
             FILE *fp;
             
+            //Initialized all the persons in names to 
+            //avoid any bad surprise
             for (int i = 0; i < MAX_NAME; i++){
         	names[i].name[0] = '\0';
        	 	names[i].hasAName = false;
@@ -69,7 +83,7 @@ int main (int argc, char *argv[]) {
                 fprintf(stderr,"range: cannot open file %s \n",fileName);
                 _Exit(1);
             }
-            //int j = 0;
+
             int line = 0;
             //Loop to read all the lines
             while(fgets (str, 30, fp) != NULL ) {
@@ -79,7 +93,6 @@ int main (int argc, char *argv[]) {
                     fprintf(stderr,"Warning - file %s Line %d is empty.\n",fileName,line);
                     continue;
                 }
-                //printf("File %s line: %d input : %s\n",argv[i],line,str);
                 //If the line's length is less than or equal to 1, ignore the line
                 //See a1 channel on discord, message from ProfB on 09/06 at 0904 for reasoning
                 if  (str[1] == '\n'){
@@ -90,11 +103,13 @@ int main (int argc, char *argv[]) {
                 //if not, find the next empty spot
                 int index = 0;
                 while (stringIsNotEqual(names[index].name,str) && index<namesSize){
+                    //if the char of the readed line == \n, we can safely exit the loop
                     if (str[index] == '\n') {
                         index = namesSize-1;
                     }
                     index++;
                 }
+                //If the name is not already in the array, store it
                 if (index>=namesSize){
                     int i = 0;
                     while (str[i]!='\n'){
@@ -107,6 +122,7 @@ int main (int argc, char *argv[]) {
                     namesSize++;
                 } else names[index].occurrence++;
             }
+            //End of the child process
             fclose(fp);
             write (pfds[1],names,sizeof(buf));
             close (pfds[1]);
@@ -123,12 +139,15 @@ int main (int argc, char *argv[]) {
         while (buf[i].hasAName && i<100){
             //see if the name is already in the array
             int j = 0;
+            //Search the name
             while (listNames[j].hasAName && stringIsNotEqual(listNames[j].name,buf[i].name)){
                 j++;
             }
+            //If the name is already in the array, simply add the occurence
             if (listNames[j].hasAName){
                 listNames[j].occurrence += buf[i].occurrence;
             } else {
+                // else store the information from the child array into the parent's array
                 strcpy(listNames[j].name,buf[i].name);
                 listNames[j].occurrence = buf[i].occurrence;
                 listNames[j].hasAName = true;
@@ -137,8 +156,10 @@ int main (int argc, char *argv[]) {
         }
         //close(pfds[0]); Strange behavior when place here
     }
+    //End of parent process
     close(pfds[0]);
     int j = 0;
+    //Display all the names and the occurence
     while (listNames[j].hasAName && j<100) {
         printf("%s : %d\n", listNames[j].name, listNames[j].occurrence);
         j++;
