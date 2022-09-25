@@ -2,7 +2,7 @@
  * Description: This module takes one or more text files and return the total count of each names in the files.
  * Author name: Lilou Sicard-Noel
  * Author email: lilou.sicard-noel@sjsu.edu 
- * Last modified date: 09/21/2022
+ * Last modified date: 09/25/2022
  * Creation date: 09/13/2022
  * GitHub Repo : https://github.com/lilousicard/CS149-Assigment1
  **/
@@ -66,7 +66,7 @@ int main (int argc, char *argv[]) {
 
             // check that fp is not null, return an error otherwise
             if(fp == NULL) {
-                fprintf(stderr,"error: cannot open file %s \n",fileName);
+                fprintf(stderr,"range: cannot open file %s \n",fileName);
                 _Exit(1);
             }
             //int j = 0;
