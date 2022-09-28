@@ -81,8 +81,8 @@ int main (int argc, char *argv[]) {
             // check that fp is not null, return an error otherwise
             if(fp == NULL) {
                 fprintf(stderr,"range: cannot open file %s \n",fileName);
-		write (pfds[1],names,sizeof(buf));
-		close (pfds[1]);
+		//write (pfds[1],names,sizeof(buf));
+		//close (pfds[1]);
                 _Exit(2);
             }
 
@@ -133,29 +133,31 @@ int main (int argc, char *argv[]) {
     }
     int pid;
     //PARENT PROCESS
-    while ((pid = wait(NULL)) > 0) {
-        read(pfds[0], buf, sizeof(buf));
-        //Combining the array process
-        int i = 0;
-        //for every name in the array returned by the child
-        while (buf[i].hasAName && i<100){
-            //see if the name is already in the array
-            int j = 0;
-            //Search the name
-            while (listNames[j].hasAName && stringIsNotEqual(listNames[j].name,buf[i].name)){
-                j++;
-            }
-            //If the name is already in the array, simply add the occurence
-            if (listNames[j].hasAName){
-                listNames[j].occurrence += buf[i].occurrence;
-            } else {
-                // else store the information from the child array into the parent's array
-                strcpy(listNames[j].name,buf[i].name);
+    while ((wait(&pid)) > 0) {
+	if (pid == 0){
+       	 read(pfds[0], buf, sizeof(buf));
+       	 //Combining the array process
+       	 int i = 0;
+       	 //for every name in the array returned by the child
+       	 while (buf[i].hasAName && i<100){
+        	  //see if the name is already in the array
+           	 int j = 0;
+           	 //Search the name
+           	 while (listNames[j].hasAName && stringIsNotEqual(listNames[j].name,buf[i].name)){
+               	 j++;
+           	 }
+           	 //If the name is already in the array, simply add the occurence
+           	 if (listNames[j].hasAName){
+               		 listNames[j].occurrence += buf[i].occurrence;
+           	 } else {
+               	 // else store the information from the child array into the parent's array
+               	 strcpy(listNames[j].name,buf[i].name);
                 listNames[j].occurrence = buf[i].occurrence;
                 listNames[j].hasAName = true;
-            }
-            i++;
-        }
+           	 }
+           	 i++;
+       	 }
+	}	
         //close(pfds[0]); Strange behavior when place here
     }
     //End of parent process
