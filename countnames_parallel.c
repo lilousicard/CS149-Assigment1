@@ -81,7 +81,9 @@ int main (int argc, char *argv[]) {
             // check that fp is not null, return an error otherwise
             if(fp == NULL) {
                 fprintf(stderr,"range: cannot open file %s \n",fileName);
-                _Exit(1);
+		write (pfds[1],names,sizeof(buf));
+		close (pfds[1]);
+                _Exit(2);
             }
 
             int line = 0;
